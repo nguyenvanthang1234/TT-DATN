@@ -10,20 +10,35 @@ import { Col } from "antd";
 
 import { CaretDownOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import ButtonInputSearch from "../ButtonInputSearch/ButtonInputSearch";
+import { useNavigate } from "react-router-dom";
 
 const HeaderComponent = () => {
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    navigate("/signIn");
+  };
   return (
-    <div>
+    <div
+      style={{
+        heiht: "100%",
+        width: "100%",
+        display: "flex",
+        background: "rgb(249, 78, 47)",
+        justifyContent: "center",
+      }}
+    >
       <WrapperHeader>
-        <Col span={6}>
+        <Col span={5}>
           <WrapperTextHeader>Nguyen van thang</WrapperTextHeader>
         </Col>
 
-        <Col span={12}>
+        <Col span={13}>
           <ButtonInputSearch
             size="large"
             placeholder="input search text"
             textButton="tim kiem"
+            bordered={false}
           />
         </Col>
 
@@ -34,7 +49,10 @@ const HeaderComponent = () => {
           <WrapperHeaderAccount>
             <WapperUserOutlined />
             <div>
-              <WrapperTextHeaderSmall>
+              <WrapperTextHeaderSmall
+                onClick={handleLogin}
+                style={{ cursor: "pointer" }}
+              >
                 Đăng Nhập /Đăng Kí
               </WrapperTextHeaderSmall>
               <div>

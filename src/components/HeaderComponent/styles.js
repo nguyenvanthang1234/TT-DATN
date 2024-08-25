@@ -8,6 +8,8 @@ export const WrapperHeader = styled(Row)`
   background-color: rgb(249, 78, 47);
   gap: 14px;
   flex-wrap: nowrap;
+  width: 1280px;
+  padding: 10px 0;
 `;
 export const WrapperTextHeader = styled.span`
   font-size: 18px;
