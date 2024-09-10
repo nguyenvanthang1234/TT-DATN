@@ -34,6 +34,7 @@ const SignUpPage = () => {
   };
 
   const mutation = useMutationHooks((data) => UserService.signupUser(data));
+
   const { data, isLoading, isSuccess, isError } = mutation;
 
   useEffect(() => {
@@ -52,7 +53,7 @@ const SignUpPage = () => {
       confirmPassword,
     });
 
-    console.log("sign-up", email, password, confirmPassword);
+    // console.log("sign-up", email, password, confirmPassword);
   };
 
   return (
@@ -138,9 +139,7 @@ const SignUpPage = () => {
           </Loading>
           <p>
             Bạn có tài khoản ?{" "}
-            <WrapperTextRight onClick={handleSignIn}>
-              Đăng Nhập
-            </WrapperTextRight>
+            <WrapperTextRight onClick={handleSignIn}>Đăng Kí</WrapperTextRight>
           </p>
         </WrapperContaierLeft>
       </div>

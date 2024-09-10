@@ -1,24 +1,55 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputFrom from "../../components/InputFrom/InputFrom";
 import { WrapperContaierLeft, WrapperTextRight } from "./style";
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 import { EyeFilled, EyeInvisibleFilled } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as UserService from "../../services/UserService";
 import { useMutationHooks } from "../../hooks/useMutationHook";
 import Loading from "../../components/LoadingComponent/Loading";
+import { useDispatch } from "react-redux";
+import { updateUser } from "../../redux/slides/userSlide";
+import jwt_decode from "jwt-decode";
 
 const SignInpage = () => {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const location = useLocation();
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
   const mutation = useMutationHooks((data) => UserService.login(data));
-  const { data, isLoading } = mutation;
+  const { data, isLoading, isSuccess } = mutation;
 
-  console.log("data", mutation);
+  useEffect(() => {
+    if (isSuccess) {
+      if (location?.state) {
+        navigate(location?.state);
+      } else {
+        navigate("/");
+      }
+      localStorage.setItem("access_token", JSON.stringify(data?.access_token));
+      localStorage.setItem(
+        "refresh_token",
+        JSON.stringify(data?.refresh_token)
+      );
+      if (data?.access_token) {
+        const decoded = jwt_decode(data?.access_token);
+        if (decoded?.id) {
+          handleGetDetailsUser(decoded?.id, data?.access_token);
+        }
+      }
+    }
+  }, [isSuccess]);
+
+  const handleGetDetailsUser = async (id, token) => {
+    const storage = localStorage.getItem("refresh_token");
+    const refreshToken = JSON.parse(storage);
+    const res = await UserService.getDetailsUser(id, token);
+    dispatch(updateUser({ ...res?.data, access_token: token, refreshToken }));
+  };
 
   const handleSignUp = () => {
     navigate("/signUp");
