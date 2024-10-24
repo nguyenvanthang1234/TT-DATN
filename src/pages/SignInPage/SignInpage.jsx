@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import InputFrom from "../../components/InputFrom/InputFrom";
-import { WrapperContaierLeft, WrapperTextRight } from "./style";
+import { WrapperContainerLeft, WrapperTextRight } from "./style";
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 import { EyeFilled, EyeInvisibleFilled } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -8,46 +8,64 @@ import * as UserService from "../../services/UserService";
 import { useMutationHooks } from "../../hooks/useMutationHook";
 import Loading from "../../components/LoadingComponent/Loading";
 import { useDispatch } from "react-redux";
-import { updateUser } from "../../redux/slides/userSlide";
+import { updateUser } from "../../redux/slices/userSlice";
 import jwt_decode from "jwt-decode";
+import { message } from "antd";
 
-const SignInpage = () => {
+const SignInPage = () => {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const location = useLocation();
+
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
   const mutation = useMutationHooks((data) => UserService.login(data));
-  const { data, isLoading, isSuccess } = mutation;
+  const { data, isLoading, isSuccess, isError } = mutation;
 
   useEffect(() => {
     if (isSuccess) {
-      if (location?.state) {
-        navigate(location?.state);
-      } else {
-        navigate("/");
-      }
-      localStorage.setItem("access_token", JSON.stringify(data?.access_token));
-      localStorage.setItem(
-        "refresh_token",
-        JSON.stringify(data?.refresh_token)
-      );
-      if (data?.access_token) {
-        const decoded = jwt_decode(data?.access_token);
-        if (decoded?.id) {
-          handleGetDetailsUser(decoded?.id, data?.access_token);
+      if (data?.status === "OK") {
+        if (location?.state) {
+          navigate(location?.state);
+        } else {
+          navigate("/");
         }
+        localStorage.setItem(
+          "access_token",
+          JSON.stringify(data?.access_token)
+        );
+        localStorage.setItem(
+          "refresh_token",
+          JSON.stringify(data?.refresh_token)
+        );
+        if (data?.access_token) {
+          const decoded = jwt_decode(data?.access_token);
+          if (decoded?.id) {
+            handleGetDetailsUser(decoded?.id, data?.access_token);
+          }
+        }
+      } else {
+        console.log(data?.message);
       }
     }
-  }, [isSuccess]);
+  }, [isSuccess, data]);
+
+  useEffect(() => {
+    if (data?.status === "ERR") {
+      message.error(data.message || "Đã xảy ra lỗi!");
+    } else if (isSuccess) {
+      message.success("Đăng Nhập thành công");
+    }
+  }, [isSuccess, isError, data]);
 
   const handleGetDetailsUser = async (id, token) => {
     const storage = localStorage.getItem("refresh_token");
     const refreshToken = JSON.parse(storage);
     const res = await UserService.getDetailsUser(id, token);
+
     dispatch(updateUser({ ...res?.data, access_token: token, refreshToken }));
   };
 
@@ -58,7 +76,7 @@ const SignInpage = () => {
   const handleOnChangeEmail = (value) => {
     setEmail(value);
   };
-  const handleOnChangePasword = (value) => {
+  const handleOnChangePassword = (value) => {
     setPassword(value);
   };
 
@@ -67,7 +85,6 @@ const SignInpage = () => {
       email,
       password,
     });
-    console.log("sign-in", email, password);
   };
 
   return (
@@ -81,7 +98,7 @@ const SignInpage = () => {
       }}
     >
       <div style={{ width: "600px", height: "450px", background: "#fff" }}>
-        <WrapperContaierLeft>
+        <WrapperContainerLeft>
           <h1>Xin chào</h1>
           <p>Đăng Nhập Tạo Tài khoản</p>
           <InputFrom
@@ -106,13 +123,13 @@ const SignInpage = () => {
               placeholder="password"
               type={isShowPassword ? "text" : "password"}
               value={password}
-              onChange={handleOnChangePasword}
+              onChange={handleOnChangePassword}
             />
           </div>
 
-          {data?.status === "ERR" && (
+          {/* {data?.status === "ERR" && (
             <span style={{ color: "red" }}>{data?.message}</span>
-          )}
+          )} */}
           <Loading isLoading={isLoading}>
             <ButtonComponent
               disabled={!email.length || !password.length}
@@ -136,10 +153,10 @@ const SignInpage = () => {
               Tạo tài khoản
             </WrapperTextRight>
           </p>
-        </WrapperContaierLeft>
+        </WrapperContainerLeft>
       </div>
     </div>
   );
 };
 
-export default SignInpage;
+export default SignInPage;

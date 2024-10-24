@@ -25,7 +25,7 @@ const AdminPage = () => {
   };
   const [keySelected, setKeySelected] = useState("");
 
-  const handleOnClick = ({ item, key, keyPath, domEvent }) => {
+  const handleOnClick = ({ key }) => {
     setKeySelected(key);
   };
   return (

@@ -7,7 +7,7 @@ import {
   WrapperTextDiscount,
   WrapperTextPrice,
 } from "./style";
-import image from "../../asset/tải xuống.webp";
+
 import { StarFilled } from "@ant-design/icons";
 
 const CardComponent = (props) => {
@@ -44,7 +44,9 @@ const CardComponent = (props) => {
       </WrapperText>
 
       <WrapperTextPrice>
-        <span style={{ marginRight: "8px" }}>{price}</span>
+        <span style={{ marginRight: "8px" }}>
+          {price ? price.toLocaleString("vi-VN") : "0"}
+        </span>
         <WrapperTextDiscount> - {discount || 5} %</WrapperTextDiscount>
       </WrapperTextPrice>
     </WrapperCardStyle>

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { WrapperContaierLeft, WrapperTextRight } from "./style";
+import { WrapperContainerLeft, WrapperTextRight } from "./style";
 import InputFrom from "../../components/InputFrom/InputFrom";
 import { EyeFilled, EyeInvisibleFilled } from "@ant-design/icons";
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
@@ -26,25 +26,26 @@ const SignUpPage = () => {
   const handleOnChangeEmail = (value) => {
     setEmail(value);
   };
-  const handleOnChangePasword = (value) => {
+  const handleOnChangePassword = (value) => {
     setPassword(value);
   };
   const handleOnChangeConfirmPassword = (value) => {
     setConfirmPassword(value);
   };
 
-  const mutation = useMutationHooks((data) => UserService.signupUser(data));
+  const mutation = useMutationHooks((data) => UserService.signUpUser(data));
 
-  const { data, isLoading, isSuccess, isError } = mutation;
+  const { data, isLoading, isSuccess, isError, error } = mutation;
 
   useEffect(() => {
     if (isSuccess) {
-      message.success();
-      handleSignIn();
+      message.success("Đăng kí thành công");
+      setTimeout(handleSignIn, 2000);
     } else if (isError) {
-      message.error();
+      const errorMessage = error.response?.data?.message || "Đã xảy ra lỗi!";
+      message.error(errorMessage);
     }
-  }, [isSuccess, isError]);
+  }, [isSuccess, isError, data, error]);
 
   const handleSignUp = (value) => {
     mutation.mutate({
@@ -52,8 +53,6 @@ const SignUpPage = () => {
       password,
       confirmPassword,
     });
-
-    // console.log("sign-up", email, password, confirmPassword);
   };
 
   return (
@@ -67,15 +66,19 @@ const SignUpPage = () => {
       }}
     >
       <div style={{ width: "600px", height: "450px", background: "#fff" }}>
-        <WrapperContaierLeft>
+        <WrapperContainerLeft>
           <h1>Xin chào</h1>
           <p> Tạo Tài khoản</p>
-          <InputFrom
-            style={{ marginBottom: "20px" }}
-            placeholder="thang@gmail.com"
-            value={email}
-            onChange={handleOnChangeEmail}
-          />
+
+          <div>
+            <InputFrom
+              style={{ marginBottom: "20px" }}
+              placeholder="thang@gmail.com"
+              value={email}
+              onChange={handleOnChangeEmail}
+            />
+          </div>
+
           <div style={{ position: "relative" }}>
             <span
               onClick={() => setIsShowPassword(!isShowPassword)}
@@ -93,9 +96,10 @@ const SignUpPage = () => {
               style={{ marginBottom: "10px" }}
               type={isShowPassword ? "text" : "password"}
               value={password}
-              onChange={handleOnChangePasword}
+              onChange={handleOnChangePassword}
             />
           </div>
+
           <div style={{ position: "relative" }}>
             <span
               onClick={() => setIsShowConfirmPassword(!isShowConfirmPassword)}
@@ -109,15 +113,16 @@ const SignUpPage = () => {
               {isShowConfirmPassword ? <EyeFilled /> : <EyeInvisibleFilled />}
             </span>
             <InputFrom
-              placeholder="comfirm password"
+              placeholder="confirm password"
               type={isShowConfirmPassword ? "text" : "password"}
               value={confirmPassword}
               onChange={handleOnChangeConfirmPassword}
             />
           </div>
+          {/* 
           {data?.status === "ERR" && (
             <span style={{ color: "red" }}>{data?.message}</span>
-          )}
+          )} */}
           <Loading isLoading={isLoading}>
             <ButtonComponent
               disabled={
@@ -139,9 +144,11 @@ const SignUpPage = () => {
           </Loading>
           <p>
             Bạn có tài khoản ?{" "}
-            <WrapperTextRight onClick={handleSignIn}>Đăng Kí</WrapperTextRight>
+            <WrapperTextRight onClick={handleSignIn}>
+              Đăng Nhập{" "}
+            </WrapperTextRight>
           </p>
-        </WrapperContaierLeft>
+        </WrapperContainerLeft>
       </div>
     </div>
   );

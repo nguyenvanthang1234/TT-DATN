@@ -11,9 +11,10 @@ const initialState = {
   isAdmin: false,
 };
 
-export const userSlide = createSlice({
+export const userSlice = createSlice({
   name: "user",
   initialState,
+
   reducers: {
     updateUser: (state, action) => {
       const {
@@ -47,5 +48,5 @@ export const userSlide = createSlice({
   },
 });
 
-export const { updateUser, resetUser } = userSlide.actions;
-export default userSlide.reducer;
+export const { updateUser, resetUser } = userSlice.actions;
+export default userSlice.reducer;

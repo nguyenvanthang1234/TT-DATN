@@ -13,18 +13,19 @@ import { useDispatch, useSelector } from "react-redux";
 import * as UserService from "../../services/UserService";
 import { useMutationHooks } from "../../hooks/useMutationHook";
 import * as message from "../../components/Message/Message";
-import { updateUser } from "../../redux/slides/userSlide";
+import { updateUser } from "../../redux/slices/userSlice";
 import { getBase64 } from "../../utils";
 import { Button } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 
-const Profilepage = () => {
+const ProfilePage = () => {
   const user = useSelector((state) => state.user);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [avatar, setAvatar] = useState("");
+  const dispatch = useDispatch();
 
   const mutation = useMutationHooks(async (data) => {
     const { id, access_token, ...rests } = data;
@@ -34,8 +35,8 @@ const Profilepage = () => {
     }
   });
 
-  const dispatch = useDispatch();
-  const { data, isLoading, isSuccess, isError } = mutation;
+  const { isLoading, isSuccess, isError } = mutation;
+  // console.log("data", user);
 
   useEffect(() => {
     setEmail(user?.email);
@@ -239,4 +240,4 @@ const Profilepage = () => {
   );
 };
 
-export default Profilepage;
+export default ProfilePage;

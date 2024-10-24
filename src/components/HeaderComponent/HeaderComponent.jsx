@@ -3,7 +3,7 @@ import {
   WrapperHeader,
   WrapperTextHeader,
   WrapperHeaderAccount,
-  WapperUserOutlined,
+  WrapperUserOutlined,
   WrapperTextHeaderSmall,
   WrapperContentPopup,
 } from "./styles";
@@ -14,9 +14,10 @@ import { CaretDownOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import ButtonInputSearch from "../ButtonInputSearch/ButtonInputSearch";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { resetUser } from "../../redux/slides/userSlide";
+import { resetUser } from "../../redux/slices/userSlice";
 import { useState } from "react";
 import Loading from "../LoadingComponent/Loading";
+import { searchProduct } from "../../redux/slices/productSlice";
 
 const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
   const navigate = useNavigate();
@@ -25,9 +26,13 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
   const dispatch = useDispatch();
   const [userAvatar, setUserAvatar] = useState("");
   const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
 
   const handleLogin = () => {
     navigate("/signIn");
+  };
+  const handleHome = () => {
+    navigate("/");
   };
 
   const handleLogout = async () => {
@@ -49,6 +54,11 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
     setUserAvatar(user?.avatar);
     setLoading(false);
   }, [user?.name, user?.avatar]);
+
+  const onSearch = (e) => {
+    setSearch(e.target.value);
+    dispatch(searchProduct(e.target.value));
+  };
 
   const content = (
     <div>
@@ -83,7 +93,7 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
         }}
       >
         <Col span={5}>
-          <WrapperTextHeader>Nguyen van thang</WrapperTextHeader>
+          <WrapperTextHeader onClick={handleHome}>SHOP</WrapperTextHeader>
         </Col>
         {!isHiddenSearch && (
           <Col span={13}>
@@ -92,6 +102,7 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
               placeholder="input search text"
               textButton="tim kiem"
               bordered={false}
+              onChange={onSearch}
             />
           </Col>
         )}
@@ -114,7 +125,7 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
                   }}
                 />
               ) : (
-                <WapperUserOutlined style={{ fontSize: "30px" }} />
+                <WrapperUserOutlined style={{ fontSize: "30px" }} />
               )}
               {user?.access_token ? (
                 <>

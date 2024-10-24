@@ -9,7 +9,7 @@ const TypeProductPage = () => {
     <div style={{ padding: "0 120px", background: "#efefef" }}>
       <Row
         style={{
-          background: "efefef",
+          background: "#efefef",
           paddingTop: "10px",
           flexWrap: "nowrap",
         }}

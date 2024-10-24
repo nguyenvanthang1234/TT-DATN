@@ -1,40 +1,77 @@
 import { Table } from "antd";
-import React from "react";
+import React, { useMemo, useState } from "react";
 import Loading from "../LoadingComponent/Loading";
+import { Excel } from "antd-table-saveas-excel";
 
 const TableComponent = (props) => {
   const {
     selectionType = "checkbox",
-    data = [],
-    isloading = false,
+    data: dataSource = [],
+    isLoading = false,
     columns = [],
+    handleDeleteMany,
   } = props;
 
-  console.log("data", data);
+  const [rowSelectedKeys, setRowSelectedKeys] = useState([]);
+  const newColumnExport = useMemo(() => {
+    const arr = columns.filter((col) => col.dataIndex !== "action");
+    return arr;
+  }, [columns]);
 
   const rowSelection = {
+    selectedRowKeys: rowSelectedKeys,
     onChange: (selectedRowKeys, selectedRows) => {
       console.log(
         `selectedRowKeys: ${selectedRowKeys}`,
         "selectedRows: ",
         selectedRows
       );
+      setRowSelectedKeys(selectedRowKeys);
     },
-    getCheckboxProps: (record) => ({
-      disabled: record.name === "Disabled User",
-      // Column configuration not to be checked
-      name: record.name,
-    }),
   };
+
+  const handleDeleteAll = () => {
+    handleDeleteMany(rowSelectedKeys);
+  };
+  const exportExcel = () => {
+    const excel = new Excel();
+    excel
+      .addSheet("test")
+      .addColumns(newColumnExport)
+      .addDataSource(dataSource, {
+        str2Percent: true,
+      })
+      .saveAs("Excel.xlsx");
+  };
+
   return (
-    <Loading isLoading={isloading}>
+    <Loading isLoading={isLoading}>
+      {rowSelectedKeys.length > 0 && (
+        <div
+          style={{
+            background: "#1d1ddd",
+            color: "#fff",
+            fontWeight: "bold",
+            cursor: "pointer",
+            padding: "10px",
+            textAlign: "center",
+            marginBottom: "10px",
+          }}
+          onClick={handleDeleteAll}
+        >
+          Xóa tất cả
+        </div>
+      )}
+      <button onClick={exportExcel}>Export Excel</button>
+
       <Table
         rowSelection={{
           type: selectionType,
           ...rowSelection,
         }}
         columns={columns}
-        dataSource={data}
+        dataSource={dataSource}
+        {...props}
       />
     </Loading>
   );

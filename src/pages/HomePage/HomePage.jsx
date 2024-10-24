@@ -17,7 +17,7 @@ const HomePage = () => {
   const searchDebounce = useDebounce(searchProduct, 500);
   const [loading, setLoading] = useState(false);
   const [limit, setLimit] = useState(6);
-  const [typeProduct, setTypeproducts] = useState([]);
+  const [typeProduct, setTypeProducts] = useState([]);
 
   const fetchProductAll = async (context) => {
     const limit = context?.queryKey && context?.queryKey[1];
@@ -29,7 +29,7 @@ const HomePage = () => {
   const fetchAllTypeProduct = async () => {
     const res = await ProductService.getAllProduct();
     if (res?.status === "ok") {
-      setTypeproducts(res?.data);
+      setTypeProducts(res?.data);
     }
   };
   const {
@@ -107,7 +107,7 @@ const HomePage = () => {
             }}
           >
             <WrapperButton
-              textButton="Xem Thêm"
+              textButton={isPreviousData ? "load more " : "Xem Thêm"}
               type="outline"
               styleButton={{
                 border: "1px solid rgb(255,57,69)",
@@ -120,6 +120,11 @@ const HomePage = () => {
                 color: "rgb(255,57,69)",
               }}
               styleTextButton={{ fontWeight: "500" }}
+              onClick={() => setLimit((prev) => prev + 6)}
+              disabled={
+                products?.total === products?.data.length ||
+                products?.totalPage === 1
+              }
             />
           </div>
         </div>
