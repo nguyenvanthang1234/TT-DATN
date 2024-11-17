@@ -26,6 +26,7 @@ const SignInPage = () => {
   const { data, isLoading, isSuccess, isError } = mutation;
 
   useEffect(() => {
+    console.log("location", location);
     if (isSuccess) {
       if (data?.status === "OK") {
         if (location?.state) {
@@ -33,14 +34,8 @@ const SignInPage = () => {
         } else {
           navigate("/");
         }
-        localStorage.setItem(
-          "access_token",
-          JSON.stringify(data?.access_token)
-        );
-        localStorage.setItem(
-          "refresh_token",
-          JSON.stringify(data?.refresh_token)
-        );
+        localStorage.setItem("access_token", JSON.stringify(data?.access_token));
+        localStorage.setItem("refresh_token", JSON.stringify(data?.refresh_token));
         if (data?.access_token) {
           const decoded = jwt_decode(data?.access_token);
           if (decoded?.id) {
@@ -148,10 +143,7 @@ const SignInPage = () => {
             />
           </Loading>
           <p>
-            Chưa có tài khoản ?{" "}
-            <WrapperTextRight onClick={handleSignUp}>
-              Tạo tài khoản
-            </WrapperTextRight>
+            Chưa có tài khoản ? <WrapperTextRight onClick={handleSignUp}>Tạo tài khoản</WrapperTextRight>
           </p>
         </WrapperContainerLeft>
       </div>

@@ -17,7 +17,8 @@ const HomePage = () => {
   const searchDebounce = useDebounce(searchProduct, 500);
   const [loading, setLoading] = useState(false);
   const [limit, setLimit] = useState(6);
-  const [typeProduct, setTypeProducts] = useState([]);
+
+  const [typeProducts, setTypeProducts] = useState([]);
 
   const fetchProductAll = async (context) => {
     const limit = context?.queryKey && context?.queryKey[1];
@@ -27,8 +28,8 @@ const HomePage = () => {
   };
 
   const fetchAllTypeProduct = async () => {
-    const res = await ProductService.getAllProduct();
-    if (res?.status === "ok") {
+    const res = await ProductService.getAllTypeProduct();
+    if (res?.status === "OK") {
       setTypeProducts(res?.data);
     }
   };
@@ -48,17 +49,12 @@ const HomePage = () => {
 
   return (
     <Loading isLoading={isLoading || loading}>
-      <div style={{ padding: "0 120px" }}>
+      <div style={{ width: "1270px", margin: "0 auto" }}>
         <WrapperTypeProduct>
-          {typeProduct.map((item) => {
-            return <TypeProduct name={item} key={item} />;
-          })}
+          {Array.isArray(typeProducts) && typeProducts.map((item) => <TypeProduct name={item} key={item} />)}
         </WrapperTypeProduct>
       </div>
-      <div
-        className="body"
-        style={{ width: "100%", backgroundColor: "#efefef" }}
-      >
+      <div className="body" style={{ width: "100%", backgroundColor: "#efefef" }}>
         <div
           id="container"
           style={{
@@ -121,10 +117,7 @@ const HomePage = () => {
               }}
               styleTextButton={{ fontWeight: "500" }}
               onClick={() => setLimit((prev) => prev + 6)}
-              disabled={
-                products?.total === products?.data.length ||
-                products?.totalPage === 1
-              }
+              disabled={products?.total === products?.data.length || products?.totalPage === 1}
             />
           </div>
         </div>

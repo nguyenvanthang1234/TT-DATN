@@ -1,15 +1,12 @@
 import { Button, Form, Space } from "antd";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  SearchOutlined,
-} from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, SearchOutlined } from "@ant-design/icons";
 import React, { useRef } from "react";
 import { WrapperHeader, WrapperUploadFile } from "./style";
 import TableComponent from "../TableComponent/TableComponent";
 import { useState } from "react";
 import InputComponent from "../InputComponent/InputComponent";
 import { getBase64, renderOptions } from "../../utils";
+import * as UserServiceAdmin from "../../services/UserServiceAdmin";
 import * as UserService from "../../services/UserService";
 import { useMutationHooks } from "../../hooks/useMutationHook";
 import Loading from "../../components/LoadingComponent/Loading";
@@ -45,32 +42,29 @@ const AdminUser = () => {
 
   const mutationUpdate = useMutationHooks((data) => {
     const { id, token, ...rests } = data;
-    const res = UserService.updateUser(id, { ...rests }, token);
+    const res = UserServiceAdmin.updateUser(id, { ...rests }, token);
     return res;
   });
 
   const mutationDeleted = useMutationHooks((data) => {
     const { id, token } = data;
-    const res = UserService.deleteUser(id, token);
+    const res = UserServiceAdmin.deleteUser(id, token);
     return res;
   });
 
   const mutationDeletedMany = useMutationHooks((data) => {
     const { token, ...ids } = data;
-    const res = UserService.deleteManyUser(ids, token);
+    const res = UserServiceAdmin.deleteManyUser(ids, token);
     return res;
   });
 
   const getAllUsers = async () => {
-    const res = await UserService.getAllUser(user?.access_token);
+    const res = await UserServiceAdmin.getAllUser(user?.access_token);
     return res;
   };
 
   const fetchGetDetailsUser = async (rowSelected) => {
-    const res = await UserService.getDetailsUser(
-      rowSelected,
-      user?.access_token
-    );
+    const res = await UserService.getDetailsUser(rowSelected, user?.access_token);
     if (res?.data) {
       setStateUserDetails({
         name: res?.data?.name,
@@ -146,15 +140,12 @@ const AdminUser = () => {
           style={{ color: "red", fontSize: "30px", cursor: "pointer" }}
           onClick={() => setIsModalOpenDelete(true)}
         />
-        <EditOutlined
-          style={{ color: "orange", fontSize: "30px", cursor: "pointer" }}
-          onClick={handleDetailsUser}
-        />
+        <EditOutlined style={{ color: "orange", fontSize: "30px", cursor: "pointer" }} onClick={handleDetailsUser} />
       </div>
     );
   };
 
-  const handleSearch = (confirm) => {
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
   };
   const handleReset = (clearFilters) => {
@@ -162,12 +153,7 @@ const AdminUser = () => {
   };
 
   const getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-    }) => (
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div
         style={{
           padding: 8,
@@ -178,9 +164,7 @@ const AdminUser = () => {
           ref={searchInput}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
-          onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
           onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
           style={{
             marginBottom: 8,
@@ -218,8 +202,7 @@ const AdminUser = () => {
         }}
       />
     ),
-    onFilter: (value, record) =>
-      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilter: (value, record) => record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownOpenChange: (visible) => {
       if (visible) {
         setTimeout(() => searchInput.current?.select(), 100);
@@ -400,65 +383,30 @@ const AdminUser = () => {
             autoComplete="on"
             form={form}
           >
-            <Form.Item
-              label="Name"
-              name="name"
-              rules={[{ required: true, message: "Please input your name!" }]}
-            >
-              <InputComponent
-                value={stateUserDetails["name"]}
-                onChange={handleOnchangeDetails}
-                name="name"
-              />
+            <Form.Item label="Name" name="name" rules={[{ required: true, message: "Please input your name!" }]}>
+              <InputComponent value={stateUserDetails["name"]} onChange={handleOnchangeDetails} name="name" />
             </Form.Item>
 
-            <Form.Item
-              label="Email"
-              name="email"
-              rules={[{ required: true, message: "Please input your email!" }]}
-            >
-              <InputComponent
-                value={stateUserDetails["email"]}
-                onChange={handleOnchangeDetails}
-                name="email"
-              />
+            <Form.Item label="Email" name="email" rules={[{ required: true, message: "Please input your email!" }]}>
+              <InputComponent value={stateUserDetails["email"]} onChange={handleOnchangeDetails} name="email" />
             </Form.Item>
-            <Form.Item
-              label="Phone"
-              name="phone"
-              rules={[{ required: true, message: "Please input your phone!" }]}
-            >
-              <InputComponent
-                value={stateUserDetails.phone}
-                onChange={handleOnchangeDetails}
-                name="phone"
-              />
+            <Form.Item label="Phone" name="phone" rules={[{ required: true, message: "Please input your phone!" }]}>
+              <InputComponent value={stateUserDetails.phone} onChange={handleOnchangeDetails} name="phone" />
             </Form.Item>
             <Form.Item
               label="Address"
               name="address"
-              rules={[
-                { required: true, message: "Please input your address!" },
-              ]}
+              rules={[{ required: true, message: "Please input your address!" }]}
             >
-              <InputComponent
-                value={stateUserDetails.address}
-                onChange={handleOnchangeDetails}
-                name="address"
-              />
+              <InputComponent value={stateUserDetails.address} onChange={handleOnchangeDetails} name="address" />
             </Form.Item>
 
             <Form.Item
               label="Avatar"
               name="avatar"
-              rules={[
-                { required: true, message: "Please input your count image!" },
-              ]}
+              rules={[{ required: true, message: "Please input your count image!" }]}
             >
-              <WrapperUploadFile
-                onChange={handleOnchangeAvatarDetails}
-                maxCount={1}
-              >
+              <WrapperUploadFile onChange={handleOnchangeAvatarDetails} maxCount={1}>
                 <Button>Select File</Button>
                 {stateUserDetails?.avatar && (
                   <img

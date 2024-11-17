@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  WrapperConent,
-  WrapperLabText,
-  WrapperTextprice,
-  WrapperTextValue,
-} from "./style";
+import { WrapperConent, WrapperLabText, WrapperTextprice, WrapperTextValue } from "./style";
 import { Checkbox, Rate } from "antd";
 
 const NabarComponent = () => {
@@ -39,11 +34,7 @@ const NabarComponent = () => {
         return option.map((option) => {
           return (
             <div style={{ display: "flex", gap: "4px" }}>
-              <Rate
-                style={{ fontSize: "12px" }}
-                disabled
-                defaultValue={option}
-              />
+              <Rate style={{ fontSize: "12px" }} disabled defaultValue={option} />
               <span>{`tu ${option} sao `}</span>
             </div>
           );
@@ -64,9 +55,7 @@ const NabarComponent = () => {
   return (
     <div>
       <WrapperLabText>label</WrapperLabText>
-      <WrapperConent>
-        {renderContent("text", ["tu lanh", "dieu hoa"])}
-      </WrapperConent>
+      <WrapperConent>{renderContent("text", ["Lap Top", "TV", "Phone"])}</WrapperConent>
     </div>
   );
 };

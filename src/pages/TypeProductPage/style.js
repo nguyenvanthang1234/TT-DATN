@@ -11,8 +11,8 @@ export const WrapperProduct = styled.div`
 `;
 export const WrapperNavbar = styled(Col)`
   background: #fff;
-  padding-right: 10px;
   border-radius: 4px;
   height: fit-content;
   margin-top: 20px;
+  margin-right: 20px;
 `;

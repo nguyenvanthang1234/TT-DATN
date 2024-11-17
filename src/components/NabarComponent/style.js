@@ -4,6 +4,7 @@ export const WrapperLabText = styled.h4`
   color: rgb(56, 56, 61);
   font-size: 14px;
   font-weight: 500;
+  padding: 10px;
 `;
 export const WrapperTextValue = styled.span`
   color: rgb(56, 56, 61);
@@ -12,9 +13,9 @@ export const WrapperTextValue = styled.span`
 `;
 export const WrapperConent = styled.div`
   display: flex;
-  //  align-items:center
   flex-direction: column;
   gap: 12px;
+  padding: 10px;
 `;
 export const WrapperTextprice = styled.div`
  borderRadius: "30px",

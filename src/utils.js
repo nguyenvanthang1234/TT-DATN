@@ -40,3 +40,15 @@ export const renderOptions = (arr) => {
   });
   return results;
 };
+
+export const convertPrice = (price) => {
+  try {
+    // Kiểm tra nếu price là một số
+    if (typeof price !== "number") return null;
+
+    const result = price.toLocaleString("vi-VN").replaceAll(",", ".");
+    return `${result} VND`;
+  } catch (error) {
+    return null;
+  }
+};

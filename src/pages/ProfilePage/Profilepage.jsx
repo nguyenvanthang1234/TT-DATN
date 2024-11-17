@@ -106,22 +106,6 @@ const ProfilePage = () => {
               value={name}
               onChange={handleOnchangeName}
             />
-            <ButtonComponent
-              onClick={handleUpdate}
-              size={40}
-              styleButton={{
-                height: "30px",
-                width: "fit-content",
-                borderRadius: "4px",
-                padding: "2px 6px 6px",
-              }}
-              textButton={"Cập nhật"}
-              styleTextButton={{
-                color: "rgb(26, 148, 255)",
-                fontSize: "15px",
-                fontWeight: "700",
-              }}
-            />
           </WrapperInput>
           <WrapperInput>
             <WrapperLabel htmlFor="email">Email</WrapperLabel>
@@ -130,22 +114,6 @@ const ProfilePage = () => {
               id="email"
               value={email}
               onChange={handleOnchangeEmail}
-            />
-            <ButtonComponent
-              onClick={handleUpdate}
-              size={40}
-              styleButton={{
-                height: "30px",
-                width: "fit-content",
-                borderRadius: "4px",
-                padding: "2px 6px 6px",
-              }}
-              textButton={"Cập nhật"}
-              styleTextButton={{
-                color: "rgb(26, 148, 255)",
-                fontSize: "15px",
-                fontWeight: "700",
-              }}
             />
           </WrapperInput>
           <WrapperInput>
@@ -156,22 +124,6 @@ const ProfilePage = () => {
               value={phone}
               onChange={handleOnchangePhone}
             />
-            <ButtonComponent
-              onClick={handleUpdate}
-              size={40}
-              styleButton={{
-                height: "30px",
-                width: "fit-content",
-                borderRadius: "4px",
-                padding: "2px 6px 6px",
-              }}
-              textButton={"Cập nhật"}
-              styleTextButton={{
-                color: "rgb(26, 148, 255)",
-                fontSize: "15px",
-                fontWeight: "700",
-              }}
-            />
           </WrapperInput>
           <WrapperInput>
             <WrapperLabel htmlFor="address">Address</WrapperLabel>
@@ -180,22 +132,6 @@ const ProfilePage = () => {
               id="address"
               value={address}
               onChange={handleOnchangeAddress}
-            />
-            <ButtonComponent
-              onClick={handleUpdate}
-              size={40}
-              styleButton={{
-                height: "30px",
-                width: "fit-content",
-                borderRadius: "4px",
-                padding: "2px 6px 6px",
-              }}
-              textButton={"Cập nhật"}
-              styleTextButton={{
-                color: "rgb(26, 148, 255)",
-                fontSize: "15px",
-                fontWeight: "700",
-              }}
             />
           </WrapperInput>
           <WrapperInput>
